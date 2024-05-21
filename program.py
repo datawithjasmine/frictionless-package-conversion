@@ -54,11 +54,29 @@ if frictionless_dp == 'yes':
         metadata = describe(clean_data)
         resource = Resource.from_descriptor(metadata.to_dict())
         package = Package(resources=[resource])
+        os.makedirs(output_directory, exist_ok=True)
         export_package = os.path.join(output_directory, 'datapackage.json')
         package.to_json(export_package)
         return package
-    data_package = create_data_package(file, ".")
-    print(f"The frictionless data package has successfully been created. Check current directory for 'datapackage.json'.")
+    create_data_package(file, "./data-package")
+    print(f"The frictionless data package has successfully been created.")
+
+    readme_file = input("Would you like to generate a README.md file? (yes/no) ").lower()
+
+    if readme_file == 'yes':
+        def create_readme(output_directory):
+            os.chdir(output_directory)
+            path = os.path.join(output_directory, 'README.md')
+            with open('README.md', 'x') as r_file:
+                r_file.write("#README.md for frictionless data package\n")
+                r_file.write("Enter documentation here.")
+            return path
+        readme_data = create_readme("./data-package")
+        print("The 'README.md' file has been successfully created in directory.")
+    elif readme_file == 'no':
+        print("OK.")
+    else:
+        print("Please enter yes or no.")
 
 elif frictionless_dp == 'no':
     print("OK.")
