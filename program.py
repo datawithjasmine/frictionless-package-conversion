@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from frictionless import describe
+from frictionless import describe, validate, Package, Resource
 
 file = (input("Please enter file name: "))
 
@@ -9,7 +9,7 @@ if not os.path.exists(file):
 else:
     def create_df(imported_file):
         if imported_file.endswith('csv'):
-            df = pd.read_csv(imported_file)
+            df = pd.read_csv(imported_file, sep='|')
         elif imported_file.endswith('json'):
             df = pd.read_json(imported_file)
         else:
@@ -21,14 +21,44 @@ df_creation = input(f'A DataFrame has been made of {file}. Would you like to see
 if df_creation == 'yes':
     df = create_df(file)
     print(df.to_markdown())
-else:
+elif df_creation == 'no':
     print("OK.")
+else:
+    print("Please enter yes or no.")
 
-# cleaning_data = input(f'Would you like to clean the data from {file}? (yes/no) ')
+data_validation = input(f'Would you like to validate the data from {file}? (yes/no) ').lower()
 
+if data_validation == 'yes':
+    report = validate(file)
+    print(report)
 
+    if report.valid:
+        print('The data is valid.')
+    else:
+        print("The following errors were found: ", report.flatten(["rowNumber", "fieldNumber", "code", "message"]))
+        check_errors = input(f'Would you like to fix them? (yes/no) ').lower()
 
+        if check_errors == "no":
+            print("OK.")
+        else:
+            print("Will include the ability to clean raw data at a later date.")
+elif data_validation == 'no':
+    print("OK.")
+else:
+    print("Please enter yes or no.")
 
+frictionless_dp = input("Create a frictionless data package with metadata? (yes/no) ").lower()
 
+if frictionless_dp == 'yes':
+    def create_data_package(clean_data, output_directory):
+        metadata = describe(clean_data)
+        resource = Resource.from_descriptor(metadata.to_dict())
+        package = Package(resources=[resource])
+        export_package = os.path.join(output_directory, 'datapackage.json')
+        package.to_json(export_package)
+        return package
+    data_package = create_data_package(file, ".")
+    print(f"The frictionless data package has successfully been created. Check current directory for 'datapackage.json'.")
 
-
+elif frictionless_dp == 'no':
+    print("OK.")
