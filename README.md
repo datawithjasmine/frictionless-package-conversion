@@ -11,7 +11,7 @@
 
 ### Project Overview
 
-I built a python script that creates a frictionless data package from a data file, commonly in .csv format. The result is a folder that contains the data package file and a 'README.md' file for further instructions.
+I built a python program that creates a frictionless data package from a data file, commonly in .csv format. The result is a folder that contains the data package file and a 'README.md' file for further instructions.
 
 ### Frictionless Data
 
