@@ -6,6 +6,7 @@
 [Frictionless Data](#frictionless-data)\
 [Limitations](#limitations)\
 [Future Implementations](#future-implementations)\
+[Updates](#updates)\
 [References](#references)
 
 ### Project Overview
@@ -23,6 +24,10 @@ While the program allows you to find errors, the functionality to properly clean
 ### Future Implementations
 
 I plan to include different functionalities such as the inclusion of other data files and the ability to clean data before packaging it.
+
+### Updates
+
+
 
 ### References
 
